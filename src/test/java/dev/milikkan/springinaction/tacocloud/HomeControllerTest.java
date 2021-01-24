@@ -1,6 +1,5 @@
 package dev.milikkan.springinaction.tacocloud;
 
-import dev.milikkan.springinaction.tacocloud.controller.HomeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,7 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-@WebMvcTest(HomeController.class)
+@WebMvcTest
 class HomeControllerTest {
 
     @Autowired
