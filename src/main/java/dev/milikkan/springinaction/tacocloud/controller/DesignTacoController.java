@@ -6,10 +6,10 @@ import dev.milikkan.springinaction.tacocloud.domain.Taco;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,9 +45,11 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(Taco design) {
+    public String processDesign(@ModelAttribute("design") @Valid Taco taco, Errors errors) {
+        if (errors.hasErrors()) return "design";
+
         // save the taco design
-        log.info("Processing design: " + design);
+        log.info("Processing design: " + taco);
 
         return "redirect:/orders/current";
     }
