@@ -1,8 +1,10 @@
 package dev.milikkan.springinaction.tacocloud.controller;
 
 import dev.milikkan.springinaction.tacocloud.data.IngredientRepository;
+import dev.milikkan.springinaction.tacocloud.data.TacoRepository;
 import dev.milikkan.springinaction.tacocloud.domain.Ingredient;
 import dev.milikkan.springinaction.tacocloud.domain.Ingredient.Type;
+import dev.milikkan.springinaction.tacocloud.domain.Order;
 import dev.milikkan.springinaction.tacocloud.domain.Taco;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,12 +20,25 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
+    private final TacoRepository tacoRepository;
 
-    public DesignTacoController(IngredientRepository ingredientRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
     }
 
     @GetMapping
@@ -38,16 +53,19 @@ public class DesignTacoController {
                     filterByType(ingredients, type));
         }
 
-        model.addAttribute("design", new Taco());
         return "design";
     }
 
     @PostMapping
-    public String processDesign(@ModelAttribute("design") @Valid Taco taco, Errors errors) {
-        if (errors.hasErrors()) return "design";
+    public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order) {
+        if (errors.hasErrors()) {
+            return "design";
+        }
 
         // save the taco design
         log.info("Processing design: " + taco);
+        Taco saved = tacoRepository.save(taco);
+        order.addDesign(saved);
 
         return "redirect:/orders/current";
     }

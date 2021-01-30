@@ -13,11 +13,11 @@ public class Taco {
 
     private Long id;
 
-    private Date createdAt;
-
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")
     private String name;
+
+    private Date createdAt;
 
     @NotEmpty
     @Size(min = 1, message = "You must choose at least 1 ingredient")
