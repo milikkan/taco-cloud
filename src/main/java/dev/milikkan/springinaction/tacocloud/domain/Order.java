@@ -16,7 +16,7 @@ public class Order {
 
     private Long id;
 
-    private Date createdAt;
+    private Date placedAt;
 
     private List<Taco> tacos = new ArrayList<>();
 
